@@ -8,7 +8,7 @@ public class TestSpartan {
 
 
     @Test
-    public void test(){
+    public void addOneSpartanTest(){
 
 
 

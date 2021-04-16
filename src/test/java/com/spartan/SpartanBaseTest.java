@@ -16,6 +16,7 @@ public class SpartanBaseTest {
 
     @AfterAll
     public static void cleanup(){
-        RestAssured.reset();
+        RestAssured.reset()
+        ;
     }
 }
