@@ -1,4 +1,4 @@
-package com.spartan;
+package com.utilities;
 
 import com.utilities.ConfigurationReader;
 import io.restassured.RestAssured;

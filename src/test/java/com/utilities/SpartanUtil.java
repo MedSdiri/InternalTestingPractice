@@ -2,6 +2,7 @@ package com.utilities;
 
 import com.github.javafaker.Faker;
 import com.pojo.Spartan;
+import com.pojo.SpartanGet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
