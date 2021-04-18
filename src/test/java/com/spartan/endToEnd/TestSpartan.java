@@ -46,8 +46,8 @@ public class TestSpartan extends SpartanBaseTest {
         Ensure.that("the New spartan gender is "+payload.getGender(), p-> p.body("data.gender", is(payload.getGender())));
         Ensure.that("New spartans phone number is "+payload.getPhone(), p-> p.body("data.phone", is(payload.getPhone())));
 
-        System.out.println("newSpartanId = " + newSpartanId);
-        System.out.println("added = " + addedSpartan);
+        System.out.println("newSpartanId from Post= " + newSpartanId);
+        System.out.println("added Post= " + addedSpartan);
 
     }
 
@@ -55,7 +55,7 @@ public class TestSpartan extends SpartanBaseTest {
 //    @ParameterizedTest
 //    @MethodSource("getNewSpartanId")
     @Test
-    public void oneSpartanAddedTest(){
+    public void verifyAddedSpartanTest(){
         System.out.println("newSpartanId = " + newSpartanId);
         System.out.println("addedSpartan = " + addedSpartan);
 //        SerenityRest.given()
