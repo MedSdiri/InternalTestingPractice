@@ -1,11 +1,13 @@
 package com.utilities;
 
+import com.pojo.SpartanGet;
 import com.utilities.ConfigurationReader;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 public class SpartanBaseTest {
+
 
     @BeforeAll
     public static void init(){

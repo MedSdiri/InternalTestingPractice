@@ -15,9 +15,9 @@ public class DB_Utility {
      * Create connection method , just checking one connection successful or not
      */
     public static void createConnection(){
-        String url      = ConfigurationReader.getProperty("hr.database.url") ;
-        String username = ConfigurationReader.getProperty("hr.database.username") ;
-        String password = ConfigurationReader.getProperty("hr.database.password") ;
+        String url      = ConfigurationReader.getProperty("spartan.database.url") ;
+        String username = ConfigurationReader.getProperty("spartan.database.username") ;
+        String password = ConfigurationReader.getProperty("spartan.database.password") ;
 //        try {
 //            con = DriverManager.getConnection(url , username, password) ;
 //            System.out.println("CONNECTION SUCCESSFUL");

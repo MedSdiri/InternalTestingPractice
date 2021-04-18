@@ -3,7 +3,10 @@ package com.utilities;
 import com.github.javafaker.Faker;
 import com.pojo.Spartan;
 import com.pojo.SpartanGet;
+import net.serenitybdd.rest.SerenityRest;
+
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SpartanUtil {
@@ -30,6 +33,21 @@ public class SpartanUtil {
         sp.setGender(faker.demographic().sex());
         sp.setPhone(faker.number().numberBetween(5_000_000_000L, 10_000_000_000L));
         return sp;
+    }
+
+    public static int getLastSpartansId(){
+
+        List<Integer> listOfIds =
+                SerenityRest.given()
+                        .auth().basic(ConfigurationReader.getProperty("spartanApiLogin"),
+                        ConfigurationReader.getProperty("spartanApiPassword"))
+                        //.pathParam("spartan_id", newSpartanId)
+                        .log().uri()
+                        .when()
+                        .get("/spartans")
+                        .jsonPath().getList("id", Integer.class)
+                ;
+        return listOfIds.get(listOfIds.size()-1);
     }
 
 }
