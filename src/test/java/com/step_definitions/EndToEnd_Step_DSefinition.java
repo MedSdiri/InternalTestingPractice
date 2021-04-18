@@ -1,33 +1,24 @@
-package com.spartan.endToEnd;
+package com.step_definitions;
 
 import com.pojo.Spartan;
 import com.pojo.SpartanGet;
 import com.utilities.ConfigurationReader;
-import com.utilities.DB_Utility;
 import com.utilities.SpartanBaseTest;
 import com.utilities.SpartanUtil;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.restassured.http.ContentType;
-import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.junit5.SerenityTest;
 import net.serenitybdd.rest.Ensure;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.FixMethodOrder;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.runner.OrderWith;
-import org.junit.runners.MethodSorters;
 
-import java.util.List;
-
-import static net.serenitybdd.rest.SerenityRest.given;
 import static net.serenitybdd.rest.SerenityRest.lastResponse;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 
-@SerenityTest @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestSpartan extends SpartanBaseTest {
+@SerenityTest
+public class EndToEnd_Step_DSefinition {
+
     private static String login = ConfigurationReader.getProperty("spartanApiLogin");
     private static String password = ConfigurationReader.getProperty("spartanApiPassword");
     private static int newSpartanId;
@@ -35,28 +26,24 @@ public class TestSpartan extends SpartanBaseTest {
     private static String updatedName = "Ramiz";
     private static String updatedGender = "Male";
 
-
-
-
-    @DisplayName("Test add One Spartan POST/spartans endpoint")
-    @Test()
-    public void test_1_AddOneSpartan() {
+    @Given("user add new spartan status code {int}")
+    public void user_add_new_spartan_status_code(Integer statusCode) {
         Spartan payload = SpartanUtil.getRandomSpartanPOJO();
 
-        System.out.println("payload = " + payload);
+        System.out.println("New payload = " + payload);
 
-                SerenityRest.given()
-                        .log().uri()
-                        .auth().basic(login, password)
-                        .contentType(ContentType.JSON)
-                        .body(payload)
-                        .when()
-                        .post("/spartans")
+        SerenityRest.given()
+                .log().uri()
+                .auth().basic(login, password)
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/spartans")
 
         ;
         addedSpartan = lastResponse().jsonPath().getObject("data", SpartanGet.class);
         newSpartanId = addedSpartan.getId();
-        Ensure.that("Status Code is 201", p -> p.statusCode(201));
+        Ensure.that("Status Code is 201", p -> p.statusCode(statusCode));
         Ensure.that("New spartan id is " + newSpartanId, p -> p.body("data.id", is(newSpartanId)));
         Ensure.that("Name of the new Spartan is " + payload.getName(), p -> p.body("data.name", is(payload.getName())));
         Ensure.that("the New spartan gender is " + payload.getGender(), p -> p.body("data.gender", is(payload.getGender())));
@@ -68,10 +55,10 @@ public class TestSpartan extends SpartanBaseTest {
 
     }
 
-    @DisplayName("Test Verify the New Spartan was added GET /spartans/")
-    @Test
-    public void test_2_VerifyAddedSpartan() {
 
+
+    @Then("user get the added spartan and status code is {int}")
+    public void user_get_the_added_spartan_and_status_code_is(Integer statusCode) {
         System.out.println("newSpartanId = " + newSpartanId);
         System.out.println("addedSpartan = " + addedSpartan);
 
@@ -80,22 +67,21 @@ public class TestSpartan extends SpartanBaseTest {
                 .pathParam("spartan_id", newSpartanId)
                 .when()
                 .get("/spartans/{spartan_id}")
-        .prettyPrint()
-                ;
-        Ensure.that("Status code is 200 ", p-> p.statusCode(200));
+                .prettyPrint()
+        ;
+        Ensure.that("Status code is 200 ", p-> p.statusCode(statusCode));
         Ensure.that("Name is "+addedSpartan.getName(), p-> p.body("name", is(addedSpartan.getName())));
         Ensure.that("Gender is "+addedSpartan.getGender(), p-> p.body("gender", is(addedSpartan.getGender())));
         Ensure.that("Phone number is "+addedSpartan.getPhone(), p-> p.body("phone", is(addedSpartan.getPhone())));
 
     }
 
-    @DisplayName("Test Update the New Spartan was added Put /spartans/")
-    @Test
-    public void test_3_UpdateSpartan() {
 
+    @Then("user update the added spartan {int}")
+    public void user_update_the_added_spartan(Integer statusCode) {
         Spartan payload = SpartanUtil.getRandomSpartanPOJO();
 
-        System.out.println("payload = " + payload);
+        System.out.println("Update payload = " + payload);
 
         SerenityRest.given()
                 .log().uri()
@@ -107,17 +93,11 @@ public class TestSpartan extends SpartanBaseTest {
                 .put("/spartans/{spartan_id}")
 
         ;
-//        Ensure.that("Status code is 200 ", p-> p.statusCode(204));
-//        Ensure.that("Name is "+payload.getName(), p-> p.body("name", is(payload.getName())));
-//        Ensure.that("Gender is "+payload.getGender(), p-> p.body("gender", is(payload.getGender())));
-//        Ensure.that("Phone number is "+payload.getPhone(), p-> p.body("phone", is(payload.getPhone())));
-
     }
 
-    @DisplayName("Test Verify Spartan is Updated GET /spartans/{id}")
-    @Test
-    public void test_4_VerifySpartanUpdated() {
 
+    @And("user get and verify the update was done status code {int}")
+    public void user_get_and_verify_the_update_was_done_status_code(Integer statusCode) {
 
         SerenityRest.given()
                 .auth().basic(login, password)
@@ -126,12 +106,7 @@ public class TestSpartan extends SpartanBaseTest {
                 .get("/spartans/{spartan_id}")
                 .prettyPrint()
         ;
-//        Ensure.that("Status code is 200 ", p-> p.statusCode(200));
-//        Ensure.that("Name is "+addedSpartan.getName(), p-> p.body("name", is(addedSpartan.getName())));
-//        Ensure.that("Gender is "+addedSpartan.getGender(), p-> p.body("gender", is(addedSpartan.getGender())));
-//        Ensure.that("Phone number is "+addedSpartan.getPhone(), p-> p.body("phone", is(addedSpartan.getPhone())));
-
+        Ensure.that("status code is "+statusCode, p-> p.statusCode(statusCode));
     }
-
 
 }
