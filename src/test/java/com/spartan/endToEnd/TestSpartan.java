@@ -2,6 +2,7 @@ package com.spartan.endToEnd;
 
 import com.pojo.Spartan;
 import com.pojo.SpartanGet;
+import com.utilities.ConfigurationReader;
 import com.utilities.SpartanBaseTest;
 import com.utilities.SpartanUtil;
 import io.restassured.http.ContentType;
@@ -16,8 +17,8 @@ import static org.hamcrest.Matchers.*;
 
 @SerenityTest
 public class TestSpartan extends SpartanBaseTest {
-    private String login = "admin";
-    private String password = "admin";
+    private String login = ConfigurationReader.getProperty("spartanApiLogin");
+    private String password = ConfigurationReader.getProperty("spartanApiPassword");
     public static int newSpartanId;
     public static SpartanGet addedSpartan;
 
@@ -65,6 +66,7 @@ public class TestSpartan extends SpartanBaseTest {
 //                .get("/spartans/{spartan_id}")
 //                ;
 //        System.out.println("newSpartanId = " + newSpartanId);
+
 //        Ensure.that("Status code is 200", p-> p.statusCode(200));
 
     }
